@@ -1,183 +1,171 @@
-import React, { useState } from 'react'
-import filter from '../assets/icons/filter.svg'
-import { useQuery, QueryClient } from 'react-query'
+import React, { useState, useEffect, useRef } from 'react'
+import filterIcon from '../assets/icons/filter.svg'
+import { useQuery } from 'react-query'
 import axios from 'axios'
+import Pagination from './Pagination/Pagination'
+import FilterDropdown from './FilterDropdown'
 
 // Sample data type
-interface DataType {
+interface UserData {
+  fullName: string
   organization: string
-  name: string
-  email: string
-  phoneNumber: string
+  status: 'inactive' | 'pending' | 'active' | 'blacklisted'
   joinedDate: string
-  status: 'Inactive' | 'Pending' | 'Active' | 'Blacklisted'
+  personalInformation: {
+    phoneNumber: string
+    emailAddress: string
+  }
+  [key: string]: any // Allows flexibility for other fields coming from the API
 }
 
 const statusStyles: Record<
-  'Inactive' | 'Pending' | 'Active' | 'Blacklisted',
+  'inactive' | 'pending' | 'active' | 'blacklisted',
   string
 > = {
-  Inactive: 'bg-gray-200 text-gray-700',
-  Pending: 'bg-yellow-200 text-yellow-700',
-  Active: 'bg-green-200 text-green-700',
-  Blacklisted: 'bg-red-200 text-red-700',
+  inactive: 'bg-gray-200 text-gray-700',
+  pending: 'bg-yellow-200 text-yellow-700',
+  active: 'bg-green-200 text-green-700',
+  blacklisted: 'bg-red-200 text-red-700',
 }
 
 // Fetch data function using axios
-const fetchTableData = async () => {
+const fetchTableData = async (): Promise<UserData[]> => {
   const { data } = await axios.get(
-    'https://run.mocky.io/v3/efccbfdc-a16b-439c-a7d7-6e01e23bc22c'
+    'https://run.mocky.io/v3/17c54da7-b5c8-415d-aedf-fb5d2966a236'
   )
   return data
 }
 
 const DashboardTable: React.FC = () => {
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10)
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [dropdownIndex, setDropdownIndex] = useState<number | null>(null) // Track dropdown per row
-  const [filterOpen, setFilterOpen] = useState<boolean>(false) // Track filter dropdown
+  const [pageSize, setPageSize] = useState<number>(10)
+  const [activeFilterIndex, setActiveFilterIndex] = useState<number | null>(
+    null
+  ) // Tracks active dropdown
 
-  // Filter fields state
-  const [filters, setFilters] = useState({
-    organization: '',
-    name: '',
-    email: '',
-    date: '',
-    phoneNumber: '',
-    status: '',
-  })
+  const filterRefs = useRef<(HTMLDivElement | null)[]>([])
 
   // React Query for fetching data
-  const { data, isLoading, error } = useQuery<DataType[]>(
-    ['tableData'],
+  const { data, isLoading, error } = useQuery<UserData[]>(
+    'tableData',
     fetchTableData
   )
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        activeFilterIndex !== null &&
+        filterRefs.current[activeFilterIndex] &&
+        !filterRefs.current[activeFilterIndex]?.contains(event.target as Node)
+      ) {
+        setActiveFilterIndex(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [activeFilterIndex])
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error loading data</div>
 
+  // Paginated data
+  const getPaginatedData = () => {
+    const startIndex = (currentPage - 1) * pageSize
+    return data?.slice(startIndex, startIndex + pageSize) || []
+  }
+
   // Handle rows per page change
-  const handleRowsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRowsPerPage(parseInt(e.target.value, 10))
+  const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPageSize(parseInt(e.target.value, 10))
     setCurrentPage(1) // Reset to first page on change
   }
 
-  // Paginated data
-  const getPaginatedData = () => {
-    const startIndex = (currentPage - 1) * rowsPerPage
-    return data?.slice(startIndex, startIndex + rowsPerPage) || []
-  }
-
-  // Total number of pages
-  const getTotalPages = () => {
-    return Math.ceil((data?.length || 0) / rowsPerPage)
-  }
-
   // Handle pagination click
-  const handlePageClick = (page: number) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
 
-  // Dropdown toggle for actions menu
-  const toggleDropdown = (index: number) => {
-    setDropdownIndex(dropdownIndex === index ? null : index) // Toggle open/close
+  // Store full user data in localStorage and navigate
+  const handleUserClick = (user: UserData) => {
+    localStorage.setItem('selectedUser', JSON.stringify(user)) // Store the full user data
+    window.location.href = '/user-details' // Navigate to user details page
   }
 
-  // Filter toggle
-  const toggleFilter = () => {
-    setFilterOpen(!filterOpen) // Toggle the filter dropdown
+  const applyFilter = (filters: any) => {
+    console.log('Applied filters:', filters)
+    // Implement filter logic here
   }
 
-  // Handle filter field change
-  const handleFilterChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target
-    setFilters({ ...filters, [name]: value })
-  }
-
-  // Apply filter (placeholder logic for now)
-  const applyFilter = () => {
-    // Add filter logic here
-    console.log('Filters applied:', filters)
-  }
-
-  // Reset filter
   const resetFilter = () => {
-    setFilters({
-      organization: '',
-      name: '',
-      email: '',
-      date: '',
-      phoneNumber: '',
-      status: '',
-    })
+    console.log('Filters reset')
+    // Implement reset logic here
   }
+
+  const handleFilterClick = (index: number) => {
+    // Toggle logic: Close if the same filter is clicked, open if a different one is clicked
+    setActiveFilterIndex((prevIndex) => (prevIndex === index ? null : index))
+  }
+
+  const columns = [
+    { name: 'ORGANIZATION', accessor: 'organization' },
+    { name: 'USERNAME', accessor: 'fullName' },
+    { name: 'EMAIL', accessor: 'emailAddress' },
+    { name: 'PHONE NUMBER', accessor: 'phoneNumber' },
+    { name: 'DATE JOINED', accessor: 'joinedDate' },
+    { name: 'STATUS', accessor: 'status' },
+  ]
 
   return (
-    <div className="flex flex-col p-6 mx-auto bg-white rounded-lg shadow-lg">
-      {/* Table */}
+    <div className="relative flex flex-col p-6 mx-auto bg-white rounded-lg shadow-lg text-[#545F7D]">
       <div className="overflow-x-auto">
         <table className="relative min-w-full border-collapse table-auto">
           <thead>
-            <tr className="text-left bg-gray-50">
-              <th className="p-3 text-xs font-semibold text-gray-600">
-                ORGANIZATION
-                <button onClick={toggleFilter} className="ml-2 text-gray-600">
-                  <img src={filter} alt="Filter" className="inline w-4 h-4" />
-                </button>
-              </th>
-              <th className="p-3 text-xs font-semibold text-gray-600">
-                name
-                <button onClick={toggleFilter} className="ml-2 text-gray-600">
-                  <img src={filter} alt="Filter" className="inline w-4 h-4" />
-                </button>
-              </th>
-              <th className="p-3 text-xs font-semibold text-gray-600">
-                EMAIL
-                <button onClick={toggleFilter} className="ml-2 text-gray-600">
-                  <img src={filter} alt="Filter" className="inline w-4 h-4" />
-                </button>
-              </th>
-              <th className="p-3 text-xs font-semibold text-gray-600">
-                PHONE NUMBER
-                <button onClick={toggleFilter} className="ml-2 text-gray-600">
-                  <img src={filter} alt="Filter" className="inline w-4 h-4" />
-                </button>
-              </th>
-              <th className="p-3 text-xs font-semibold text-gray-600">
-                DATE JOINED
-                <button onClick={toggleFilter} className="ml-2 text-gray-600">
-                  <img src={filter} alt="Filter" className="inline w-4 h-4" />
-                </button>
-              </th>
-              <th className="p-3 text-xs font-semibold text-gray-600">
-                STATUS
-                <button onClick={toggleFilter} className="ml-2 text-gray-600">
-                  <img src={filter} alt="Filter" className="inline w-4 h-4" />
-                </button>
-              </th>
+            <tr className="text-left">
+              {columns.map((column, index) => (
+                <th
+                  key={index}
+                  className="items-center p-3 text-xs font-semibold text-gray-600"
+                >
+                  <div className="relative flex items-center">
+                    <span>{column.name}</span>
+                    <button
+                      className="mx-2"
+                      onClick={() => handleFilterClick(index)}
+                    >
+                      <img src={filterIcon} alt="filter" />
+                    </button>
+                  </div>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {getPaginatedData().map((data, index) => (
-              <tr key={index} className="bg-white border-b last:border-none">
+            {getPaginatedData().map((user, index) => (
+              <tr
+                key={index}
+                className="bg-white border-b cursor-pointer last:border-none"
+                onClick={() => handleUserClick(user)} // Store full user object and navigate
+              >
                 <td className="p-3 text-sm text-gray-700">
-                  {data.organization}
+                  {user.organization}
                 </td>
-                <td className="p-3 text-sm text-gray-700">{data.name}</td>
-                <td className="p-3 text-sm text-gray-700">{data.email}</td>
+                <td className="p-3 text-sm text-gray-700">{user.fullName}</td>
                 <td className="p-3 text-sm text-gray-700">
-                  {data.phoneNumber}
+                  {user.personalInformation.emailAddress}
                 </td>
-                <td className="p-3 text-sm text-gray-700">{data.joinedDate}</td>
+                <td className="p-3 text-sm text-gray-700">
+                  {user.personalInformation.phoneNumber}
+                </td>
+                <td className="p-3 text-sm text-gray-700">{user.joinedDate}</td>
                 <td className="p-3 text-sm">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      statusStyles[data.status]
+                    className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${
+                      statusStyles[user.status]
                     }`}
                   >
-                    {data.status}
+                    {user.status}
                   </span>
                 </td>
               </tr>
@@ -186,14 +174,24 @@ const DashboardTable: React.FC = () => {
         </table>
       </div>
 
+      {/* Filter Dropdown */}
+      {activeFilterIndex !== null && (
+        <div
+          ref={(el) => (filterRefs.current[activeFilterIndex] = el)}
+          className="absolute top-0 left-0 z-50 mt-16 ml-4" // Position outside table and adjust position
+        >
+          <FilterDropdown applyFilter={applyFilter} resetFilter={resetFilter} />
+        </div>
+      )}
+
       {/* Pagination and Rows per Page */}
       <div className="flex items-center justify-between mt-4">
         <div className="text-sm text-gray-600">
           Showing{' '}
           <select
             className="px-2 py-1 border border-gray-300 rounded"
-            value={rowsPerPage}
-            onChange={handleRowsPerPageChange}
+            value={pageSize}
+            onChange={handlePageSizeChange}
           >
             <option value={10}>10</option>
             <option value={20}>20</option>
@@ -202,22 +200,12 @@ const DashboardTable: React.FC = () => {
           </select>{' '}
           out of {data?.length || 0}
         </div>
-        {/* Pagination */}
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: getTotalPages() }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageClick(index + 1)}
-              className={`px-3 py-1 border rounded-md ${
-                currentPage === index + 1
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white text-blue-500'
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+        <Pagination
+          onPageChange={handlePageChange}
+          totalCount={data?.length || 0}
+          currentPage={currentPage}
+          pageSize={pageSize}
+        />
       </div>
     </div>
   )

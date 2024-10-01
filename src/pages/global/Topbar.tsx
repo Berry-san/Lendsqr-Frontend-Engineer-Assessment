@@ -1,5 +1,9 @@
 // import hamburger from '../assets/hamburger.svg'
-// import smartcareLogo from '../assets/smartcareLogo.svg'
+import lendsqrLogo from '../../assets/icons/lendsqrLogo.svg'
+import hamburger from '../../assets/icons/hamburger.svg'
+import dropdown from '../../assets/icons/dropdown.svg'
+import bell from '../../assets/icons/bell.png'
+import avatar from '../../assets/images/avatar.png'
 
 interface TopbarProps {
   sidebarOpen: boolean
@@ -8,12 +12,11 @@ interface TopbarProps {
 
 const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
   return (
-    <header className="fixed top-0 z-40 flex w-full bg-white border-b border-border_color drop-shadow-2">
-      <div className="flex items-center justify-between flex-grow px-3 md:px-6 py-2.5 lg:h-16 shadow-2 2xl:px-11">
+    <header className="fixed top-0 z-40 flex w-full bg-white border-b">
+      <div className="flex items-center justify-between flex-grow px-3 py-6 lg:py-4 shadow-2 2xl:px-11">
         <div className="flex items-center justify-between gap-2 sm:gap-4">
-          <div className="items-center hidden pl-4 text-black lg:flex">
-            {/* <img src={smartcareLogo} className="w-12 h-12" alt="" /> */}
-            <p className="font-bold text-secondary">Smartcare</p>
+          <div className="items-center hiddenlg:flex">
+            <img src={lendsqrLogo} className="h-8" alt="" />
           </div>
           <button
             aria-controls="sidebar"
@@ -21,9 +24,25 @@ const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
               e.stopPropagation()
               setSidebarOpen(!sidebarOpen)
             }}
-            className="z-40 block bg-white p-1.5 lg:hidden"
+            className="z-40 block px-4 lg:hidden"
           >
-            {/* <img src={hamburger} className="w-8 h-8" alt="" /> */}
+            <img src={hamburger} className="w-8 h-8" alt="" />
+          </button>
+        </div>
+        <div className=""></div>
+        <div className="flex items-center space-x-8">
+          <div className="">
+            <p className="underline text-[#213F7D] font-normal text-base">
+              Docs
+            </p>
+          </div>
+          <div className="">
+            <img src={bell} alt="" />
+          </div>
+          <button className="flex items-center">
+            <img src={avatar} className="w-10 mr-4" alt="" />
+            <p className="text-[#213F7D] font-medium text-base">Adedeji</p>
+            <img src={dropdown} alt="" />
           </button>
         </div>
       </div>

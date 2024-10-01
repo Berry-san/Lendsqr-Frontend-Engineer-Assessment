@@ -30,7 +30,8 @@ const cardDetails = [
 
 const Dashboard = () => {
   return (
-    <div className="space-y-5">
+    <div className="pt-8 space-y-5 text-[#213F7D]">
+      <h2 className="text-2xl font-medium">Users</h2>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
         {cardDetails.map((item, index) => (
           <DashboardCard
