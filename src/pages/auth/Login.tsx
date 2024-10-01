@@ -7,7 +7,7 @@ const Login: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false)
 
   return (
-    <div className="container">
+    <div className="containers">
       {/* Left Section with Image - Hidden on small screens */}
       <div className="left-section">
         <div className="content">

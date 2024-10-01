@@ -19,44 +19,62 @@ $gray-light: #f5f5f5;
 $border-color: #dddddd;
 $input-focus-ring: rgba(57, 205, 204, 0.3);
 
-.container {
-  display: flex;
+/* Reset and base styles */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Prevent any scrolling */
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+.containers {
+  display: flex; /* Change to flex for better control */
+  width: 100vw;
   height: 100vh;
   font-family: 'Avenir', sans-serif;
 
-  /* Left Section */
   .left-section {
-    display: none;
+    flex: 1; /* Take up half the space */
     background-color: #fdfdfd;
-    width: 50%;
-    /* align-items: center; */
-    justify-content: center;
-    padding-top: 5rem;
+    display: none;
 
     @media (min-width: 768px) {
       display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .logo {
-      margin-bottom: 8rem;
-      width: 10rem;
-      height: auto;
-    }
+    .content {
+      text-align: center;
 
-    .illustration {
-      width: 600px;
-      height: auto;
+      .logo {
+        margin-bottom: 8rem;
+        width: 10rem;
+      }
+
+      .illustration {
+        width: 100%;
+        max-width: 600px;
+      }
     }
   }
 
-  /* Right Section */
   .right-section {
-    flex: 1;
-    background-color: #ffffff;
+    flex: 1; /* Take up half the space */
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2rem;
+    background-color: #ffffff;
 
     .login-form {
       width: 100%;
@@ -94,7 +112,6 @@ $input-focus-ring: rgba(57, 205, 204, 0.3);
             }
           }
 
-          /* Show/Hide Password Button */
           button {
             position: absolute;
             right: 0.75rem;
@@ -110,7 +127,6 @@ $input-focus-ring: rgba(57, 205, 204, 0.3);
           }
         }
 
-        /* Forgot Password */
         .forgot-password {
           display: block;
           text-align: left;
@@ -124,7 +140,6 @@ $input-focus-ring: rgba(57, 205, 204, 0.3);
           }
         }
 
-        /* Submit Button */
         button[type='submit'] {
           width: 100%;
           padding: 0.75rem;
@@ -141,6 +156,18 @@ $input-focus-ring: rgba(57, 205, 204, 0.3);
           }
         }
       }
+    }
+  }
+}
+
+/* Ensure full width on smaller screens */
+@media (max-width: 767px) {
+  .container {
+    flex-direction: column;
+
+    .right-section {
+      flex: none;
+      width: 100%;
     }
   }
 }
