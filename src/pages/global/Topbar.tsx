@@ -4,6 +4,7 @@ import hamburger from '../../assets/icons/hamburger.svg'
 import dropdown from '../../assets/icons/dropdown.svg'
 import bell from '../../assets/icons/bell.png'
 import avatar from '../../assets/images/avatar.png'
+import SearchBar from '../../components/SearchBar'
 
 interface TopbarProps {
   sidebarOpen: boolean
@@ -15,7 +16,7 @@ const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
     <header className="fixed top-0 z-40 flex w-full bg-white border-b">
       <div className="flex items-center justify-between flex-grow px-3 py-6 lg:py-4 shadow-2 2xl:px-11">
         <div className="flex items-center justify-between gap-2 sm:gap-4">
-          <div className="items-center hiddenlg:flex">
+          <div className="items-center hidden lg:flex">
             <img src={lendsqrLogo} className="h-8" alt="" />
           </div>
           <button
@@ -29,8 +30,10 @@ const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
             <img src={hamburger} className="w-8 h-8" alt="" />
           </button>
         </div>
-        <div className=""></div>
-        <div className="flex items-center space-x-8">
+        <div className="hidden lg:block">
+          <SearchBar />
+        </div>
+        <div className="items-center hidden space-x-8 lg:flex">
           <div className="">
             <p className="underline text-[#213F7D] font-normal text-base">
               Docs

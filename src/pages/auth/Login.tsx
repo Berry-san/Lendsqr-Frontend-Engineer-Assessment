@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Login.scss'
 import lendsqrLogo from '../../assets/icons/lendsqrLogo.svg'
 import illustration from '../../assets/images/illustration.png'
 
 const Login: React.FC = () => {
+  const navigate = useNavigate()
   const [passwordVisible, setPasswordVisible] = useState(false)
 
   return (
@@ -41,7 +43,9 @@ const Login: React.FC = () => {
             <a href="/forgot-password" className="forgot-password">
               FORGOT PASSWORD?
             </a>
-            <button type="submit">LOG IN</button>
+            <button type="submit" onClick={() => navigate('/')}>
+              LOG IN
+            </button>
           </form>
         </div>
       </div>

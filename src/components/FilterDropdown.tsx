@@ -109,13 +109,13 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
           <button
             type="button"
             onClick={resetFilter}
-            className="px-4 py-2 text-sm text-gray-500 border border-gray-300 rounded"
+            className="w-full px-4 py-3 text-sm text-gray-500 border border-gray-300 rounded"
           >
             Reset
           </button>
           <button
             type="submit"
-            className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
+            className="px-4 py-3 text-sm w-full text-white bg-[#39CDCC] rounded ml-2"
           >
             Filter
           </button>

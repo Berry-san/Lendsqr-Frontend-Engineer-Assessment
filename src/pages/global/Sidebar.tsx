@@ -5,6 +5,10 @@ import {
   SidebarLink,
   SidebarSection,
 } from '../../lib/constants/navigation'
+import briefcase from '../../assets/icons/briefcase.svg'
+import home from '../../assets/icons/home.svg'
+import lendsqrLogo from '../../assets/icons/lendsqrLogo.svg'
+import dropdown from '../../assets/icons/chevron-down.svg'
 
 interface SidebarProps {
   sidebarOpen: boolean
@@ -79,31 +83,33 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
       )}
       <aside
         ref={sidebar}
-        className={`fixed left-0 top-0 inset-0 z-40 bg-white scrollbar-none flex h-screen w-80 lg:w-72 flex-col overflow-y-hidden bg-green duration-300 pt-20 ease-linear lg:static lg:translate-x-0 ${
+        className={`fixed left-0 top-0 inset-0 z-40 bg-white scrollbar-none flex h-screen w-[20rem] flex-col overflow-y-auto text-[#213F7D] bg-green duration-300 pt-4 lg:pt-24 pb-8 ease-linear lg:static lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* SIDEBAR HEADER */}
-        <div className="flex items-center justify-between gap-2 pt-5 lg:hidden">
-          {/* <div>
-            <img src={smartcareLogo} className="w-12 h-12" alt="Logo" />
+        <div className="flex flex-col">
+          <div className="block px-10 py-8 lg:hidden">
+            <img src={lendsqrLogo} className="h-8" alt="" />
           </div>
-          <button
-            ref={trigger}
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            aria-controls="sidebar"
-            aria-expanded={sidebarOpen}
-            className="block lg:hidden"
-          >
-            <img src={back} alt="Close Sidebar" className="flex w-5 h-5" />
-          </button> */}
+          <div className="flex items-center gap-5 px-8 py-2 mb-6 text-base font-normal">
+            <img src={briefcase} className="w-5 h-5" alt="Home" />
+            <span>Switch Organization</span>
+            <div className="">
+              <img src={dropdown} className="w-3" alt="" />
+            </div>
+          </div>
+          <div className="flex items-center gap-5 px-8 py-2 mb-6 text-base font-normal opacity-70">
+            <img src={home} className="w-6 h-6" alt="Home" />
+            Dashboard
+          </div>
         </div>
         {/* SIDEBAR MENU */}
-        <div className="flex flex-col flex-1 overflow-y-auto duration-300 ease-linear">
+        <div className="flex flex-col flex-1 duration-300 ease-linear">
           <nav className="">
             {sidebarLinks.map((section: SidebarSection, sectionIndex) => (
               <div key={sectionIndex}>
-                <h3 className="px-10 my-2 text-sm font-bold text-gray-500 uppercase">
+                <h3 className="px-10 my-2 text-xs font-medium text-gray-500 uppercase">
                   {section.title}
                 </h3>
                 <ul className="flex flex-col gap-2">
@@ -137,8 +143,8 @@ const SidebarLinks: React.FC<SidebarLinksProps> = ({ link, onClick }) => {
         to={link.route}
         className={({ isActive }) =>
           isActive
-            ? 'group relative flex items-center gap-5 text-base font-normal rounded-sm duration-300 ease-in-out hover:bg-[#39CDCC]/50 hover:border-l-2 hover:border-[#39CDCC] px-10 py-2'
-            : 'group relative flex items-center gap-5 text-base font-normal rounded-sm duration-300 ease-in-out hover:bg-[#39CDCC]/10 hover:border-l-4 hover:border-[#39CDCC] px-10 py-2'
+            ? 'group relative flex items-center gap-5 text-base font-normal rounded-sm duration-300 ease-in-out bg-[#39CDCC]/10 border-l-4 border-[#39CDCC] px-8 py-2'
+            : 'group relative flex items-center gap-5 text-base font-normal rounded-sm duration-300 ease-in-out hover:bg-[#39CDCC]/10 hover:border-l-4 hover:border-[#39CDCC] px-10 py-2 opacity-70'
         }
       >
         {({ isActive }) => (
