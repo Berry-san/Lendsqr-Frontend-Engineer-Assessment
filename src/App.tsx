@@ -9,10 +9,14 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
 
+      {/* Protected Layout and nested routes */}
       <Route path="/" element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path="/user-details" element={<UserDetails />} />
       </Route>
+
+      {/* Catch-all route that redirects any unavailable routes to login */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   )
 }

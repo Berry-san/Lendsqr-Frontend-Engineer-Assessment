@@ -1,46 +1,49 @@
-# Getting Started with Create React App
+Dashboard Application with Login, User Table, Filter, and User Details Page
+Overview
+This project is a simple dashboard application built with login functionality, a user table that includes a filter feature, and user detail pages. It is styled using Tailwind CSS for efficiency and maintainability.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Features:
+Login Page: Basic login functionality to authenticate users before accessing the dashboard.
+Dashboard Page: Displays a table of users fetched from an API or mock data.
+Filter Functionality: Allows users to search and filter the user table in real-time based on user attributes (e.g., name or email).
+User Details Page: Clicking on a username in the table leads to a detailed page displaying specific user information.
+Tech Stack
+Frontend: HTML, JavaScript, and Tailwind CSS.
+Styling: Tailwind CSS (Utility-first framework).
+Routing: Vanilla JavaScript for navigation between pages.
+Data Handling: Mock API or pre-loaded data for user information.
+Authentication: Simple form-based authentication (front-end validation).
 
-## Available Scripts
+git clone https://github.com/Berry-san/Lendsqr-Frontend-Engineer-Assessment.git
+Navigate into the project directory:
 
-In the project directory, you can run:
+cd dashboard-app
+Install dependencies:
 
-### `npm start`
+This project assumes you have a basic static setup, so no additional package installation is required. However, if you're using Node.js, you can initialize a package.json and install any necessary dependencies as needed.
+Run the project:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+npm stsrt
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Usage
+Login: Users need to log in before accessing the dashboard. Any simple form validation can be configured in login.js.
 
-### `npm test`
+Dashboard: The dashboard contains a user table. Users can click on the username to view detailed information. A filter feature is available at the top of the table to search for users.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Filter Functionality: The filter input dynamically updates the user list based on the search term. You can modify the filter logic in dashboard.js to include more advanced filtering criteria.
 
-### `npm run build`
+Key Considerations
+Styling: Tailwind CSS is used for styling. If you're unfamiliar with Tailwind, check out their official documentation for details on how to customize and extend the existing classes.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Modifications: Feel free to extend or modify the routing and filtering logic to suit larger datasets or more complex filtering criteria.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Authentication: For this demo, the login logic is simple and client-side based. In production, proper server-side authentication and validation should be added.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Contribution
+Contributions are welcome! If you'd like to make changes, please fork the repository and submit a pull request with a clear description of your changes.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Fork the repository.
+Create your feature branch: git checkout -b feature/new-feature
+Commit your changes: git commit -m 'Add some new feature'
+Push to the branch: git push origin feature/new-feature
+Submit a pull request.

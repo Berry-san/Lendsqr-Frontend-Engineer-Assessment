@@ -73,6 +73,8 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
     setOverlayActive(sidebarOpen)
   }, [sidebarExpanded, sidebarOpen])
 
+  console.log(sidebarOpen)
+
   return (
     <div className="relative scrollbar">
       {overlayActive && window.innerWidth <= 1024 && (
